@@ -39,17 +39,7 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       external: [],
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('ethers')) {
-              return 'ethers-vendor';
-            }
-            return 'vendor';
-          }
-        }
+        manualChunks: undefined
       }
     }
   }
