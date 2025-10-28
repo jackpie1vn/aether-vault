@@ -19,6 +19,11 @@
 
   <body>
     <div id="root"></div>
+    <!-- Polyfill for Node.js global variables in browser -->
+    <script>
+      window.global = window;
+      window.process = { env: {} };
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

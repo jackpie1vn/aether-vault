@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Lock, Eye } from "lucide-react";
+import { getIPFSImageUrl } from "@/utils/ipfs";
 
 interface ArtworkCardProps {
   id: string;
@@ -13,23 +14,30 @@ interface ArtworkCardProps {
   encrypted?: boolean;
 }
 
-const ArtworkCard = ({ 
-  id, 
-  title, 
-  coverUrl, 
-  tags, 
-  category, 
+const ArtworkCard = ({
+  id,
+  title,
+  coverUrl,
+  tags,
+  category,
   submittedAt,
-  encrypted = true 
+  encrypted = true
 }: ArtworkCardProps) => {
+  // 使用 IPFS URL 或回退到 placeholder
+  const imageUrl = getIPFSImageUrl(coverUrl);
+
   return (
     <Link to={`/artwork/${id}`}>
       <Card className="group relative overflow-hidden bg-gradient-card border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-glow">
         <div className="aspect-square relative overflow-hidden">
-          <img 
-            src={coverUrl} 
+          <img
+            src={imageUrl}
             alt={title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            onError={(e) => {
+              // 如果 IPFS 加载失败，回退到 placeholder
+              e.currentTarget.src = '/placeholder.svg';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           

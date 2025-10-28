@@ -1,11 +1,77 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Search, PlusCircle, User, Trophy, Layers } from "lucide-react";
+import { Shield, Search, PlusCircle, User, Trophy, Layers, Wallet } from "lucide-react";
+import { getProviderAndSigner } from "@/utils/contract";
 
 const Navigation = () => {
   const location = useLocation();
-  
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [isConnecting, setIsConnecting] = useState(false);
+
   const isActive = (path: string) => location.pathname === path;
+
+  // Check if wallet is already connected
+  useEffect(() => {
+    checkWalletConnection();
+  }, []);
+
+  // Listen for account changes
+  useEffect(() => {
+    if (typeof window.ethereum !== 'undefined') {
+      const handleAccountsChanged = (accounts: string[]) => {
+        if (accounts.length === 0) {
+          setWalletAddress('');
+        } else {
+          setWalletAddress(accounts[0]);
+        }
+      };
+
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+      return () => {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      };
+    }
+  }, []);
+
+  const checkWalletConnection = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      return;
+    }
+
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts.length > 0) {
+        setWalletAddress(accounts[0]);
+      }
+    } catch (err) {
+      console.error('Failed to check wallet connection:', err);
+    }
+  };
+
+  const connectWallet = async () => {
+    if (typeof window.ethereum === 'undefined') {
+      alert('Please install MetaMask wallet!');
+      return;
+    }
+
+    setIsConnecting(true);
+
+    try {
+      const { address } = await getProviderAndSigner();
+      setWalletAddress(address);
+    } catch (err) {
+      console.error('Failed to connect wallet:', err);
+      alert('Failed to connect wallet. Please try again.');
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const formatAddress = (addr: string) => {
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/50">
@@ -64,13 +130,28 @@ const Navigation = () => {
               </Button>
             </Link>
 
-            <Button 
-              size="sm"
-              className="gap-2 ml-4 bg-gradient-primary hover:opacity-90 transition-opacity"
-            >
-              <User className="w-4 h-4" />
-              <span className="hidden sm:inline">Connect Wallet</span>
-            </Button>
+            {walletAddress ? (
+              <Button
+                size="sm"
+                variant="outline"
+                className="gap-2 ml-4"
+              >
+                <Wallet className="w-4 h-4" />
+                <span className="hidden sm:inline">{formatAddress(walletAddress)}</span>
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={connectWallet}
+                disabled={isConnecting}
+                className="gap-2 ml-4 bg-gradient-primary hover:opacity-90 transition-opacity"
+              >
+                <User className="w-4 h-4" />
+                <span className="hidden sm:inline">
+                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                </span>
+              </Button>
+            )}
           </div>
         </div>
       </div>

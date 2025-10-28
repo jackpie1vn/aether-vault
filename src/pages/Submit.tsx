@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navigation from "@/components/layout/Navigation";
+import { WalletConnect } from "@/components/WalletConnect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Upload, X, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { submitEntry } from "@/utils/contract";
+import { uploadToIPFS, uploadTextToIPFS } from "@/utils/ipfs";
 
 const CATEGORIES = [
   "Digital Art",
@@ -28,6 +31,8 @@ const Submit = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [artworkFile, setArtworkFile] = useState<File | null>(null);
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAddTag = () => {
     if (newTag && !tags.includes(newTag)) {
@@ -50,18 +55,65 @@ const Submit = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    if (!walletAddress) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
     if (!title || !description || !artworkFile || selectedCategories.length === 0) {
       toast.error("Please fill in all required fields");
       return;
     }
 
-    // Simulate IPFS upload and contract interaction
-    toast.loading("Uploading to IPFS...");
-    
-    setTimeout(() => {
-      toast.success("Artwork submitted successfully! Your entry is now encrypted on-chain.");
-    }, 2000);
+    setIsSubmitting(true);
+
+    try {
+      // 1. Upload to IPFS
+      toast.loading("Uploading description to IPFS...", { id: "upload-desc" });
+      const descriptionResult = await uploadTextToIPFS(description);
+      toast.success(`Description uploaded: ${descriptionResult.hash.substring(0, 10)}...`, { id: "upload-desc" });
+
+      toast.loading("Uploading artwork to IPFS...", { id: "upload-file" });
+      const fileResult = await uploadToIPFS(artworkFile);
+      toast.success(`Artwork uploaded: ${fileResult.hash.substring(0, 10)}...`, { id: "upload-file" });
+
+      const descriptionHash = descriptionResult.hash;
+      const fileHash = fileResult.hash;
+
+      // 2. Submit to smart contract
+      toast.loading("Submitting to blockchain...", { id: "submit" });
+
+      const result = await submitEntry(
+        title,
+        descriptionHash,
+        fileHash,
+        tags,
+        selectedCategories
+      );
+
+      toast.success(
+        `Artwork submitted successfully! Entry ID: ${result.entryId}`,
+        { id: "submit" }
+      );
+
+      // Reset form
+      setTitle("");
+      setDescription("");
+      setTags([]);
+      setSelectedCategories([]);
+      setArtworkFile(null);
+      setCoverFile(null);
+
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to submit artwork",
+        { id: "submit" }
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,6 +130,13 @@ const Submit = () => {
               Share your creation with privacy-preserving voting powered by FHE
             </p>
           </div>
+
+          {/* Wallet Connection */}
+          {!walletAddress && (
+            <div className="flex justify-center mb-8">
+              <WalletConnect onConnected={setWalletAddress} />
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
@@ -219,12 +278,13 @@ const Submit = () => {
             </Card>
 
             {/* Submit Button */}
-            <Button 
-              type="submit" 
-              size="lg" 
+            <Button
+              type="submit"
+              size="lg"
               className="w-full bg-gradient-primary hover:opacity-90 transition-opacity text-lg"
+              disabled={!walletAddress || isSubmitting}
             >
-              Submit Artwork
+              {isSubmitting ? "Submitting..." : walletAddress ? "Submit Artwork" : "Connect Wallet to Submit"}
             </Button>
           </form>
         </div>

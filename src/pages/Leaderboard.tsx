@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Trophy, Medal, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Trophy, Medal, Award, Loader2 } from "lucide-react";
 import EncryptedBadge from "@/components/artwork/EncryptedBadge";
+import { getAllEntries, type ContestEntry } from "@/utils/contract";
+import { toast } from "sonner";
 
 const CATEGORIES = [
   "Digital Art",
@@ -16,16 +18,43 @@ const CATEGORIES = [
   "Abstract"
 ];
 
-const MOCK_LEADERBOARD = [
-  { id: "1", title: "Cosmic Dreams", artist: "0x1234...5678", votes: 42, rank: 1 },
-  { id: "2", title: "Neural Networks", artist: "0x8765...4321", votes: 38, rank: 2 },
-  { id: "3", title: "Digital Shadows", artist: "0x9876...1234", votes: 35, rank: 3 },
-  { id: "4", title: "Quantum Leap", artist: "0x5432...8765", votes: 28, rank: 4 },
-  { id: "5", title: "Fractal Infinity", artist: "0x2468...1357", votes: 22, rank: 5 },
-];
-
 const Leaderboard = () => {
   const [selectedCategory, setSelectedCategory] = useState("Digital Art");
+  const [entries, setEntries] = useState<ContestEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Load all artworks
+  useEffect(() => {
+    loadEntries();
+  }, []);
+
+  const loadEntries = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const allEntries = await getAllEntries();
+      setEntries(allEntries);
+    } catch (err) {
+      console.error("Failed to load entries:", err);
+      const errorMsg = err instanceof Error ? err.message : "Failed to load entries";
+      setError(errorMsg);
+      toast.error(errorMsg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Format address
+  const formatAddress = (addr: string) => {
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  // Filter entries by selected category
+  const filteredEntries = entries.filter((entry) =>
+    entry.categories.includes(selectedCategory)
+  );
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -59,76 +88,132 @@ const Leaderboard = () => {
 
         {/* Category Selection */}
         <div className="mb-8">
-          <h2 className="text-sm font-semibold text-foreground/80 mb-4 text-center">
+          <h2 className="text-sm font-semibold text-foreground/80 mb-2 text-center">
             Select Category
           </h2>
+          <p className="text-xs text-muted-foreground mb-4 text-center">
+            Currently viewing: <span className="text-primary font-semibold">{selectedCategory}</span>
+          </p>
           <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto">
             {CATEGORIES.map((category) => {
               const isSelected = selectedCategory === category;
               return (
-                <Badge
+                <Button
                   key={category}
                   variant={isSelected ? "default" : "outline"}
-                  className={`cursor-pointer transition-all text-sm px-4 py-2 ${
-                    isSelected 
-                      ? "bg-gradient-primary shadow-glow" 
+                  size="sm"
+                  className={`transition-all ${
+                    isSelected
+                      ? "bg-gradient-primary shadow-glow"
                       : "hover:border-primary/50"
                   }`}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => {
+                    console.log('Clicked category:', category);
+                    setSelectedCategory(category);
+                  }}
                 >
                   {category}
-                </Badge>
+                </Button>
               );
             })}
           </div>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <Card className="max-w-4xl mx-auto p-12 text-center">
+            <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-primary" />
+            <p className="text-muted-foreground">Loading artworks...</p>
+          </Card>
+        )}
+
+        {/* Error State */}
+        {error && !isLoading && (
+          <Card className="max-w-4xl mx-auto p-8 text-center border-destructive/50">
+            <p className="text-destructive mb-4">{error}</p>
+            <Button onClick={loadEntries} variant="outline">
+              Retry
+            </Button>
+          </Card>
+        )}
+
         {/* Leaderboard List */}
-        <div className="max-w-4xl mx-auto space-y-4">
-          {MOCK_LEADERBOARD.map((entry, index) => (
-            <Card 
-              key={entry.id}
-              className={`p-6 bg-gradient-card border-border/50 hover:border-primary/50 transition-all ${
-                index < 3 ? "shadow-glow" : ""
-              }`}
-            >
-              <div className="flex items-center gap-6">
-                {/* Rank */}
-                <div className="flex-shrink-0 w-12 flex items-center justify-center">
-                  {getRankIcon(entry.rank)}
-                </div>
+        {!isLoading && !error && (
+          <>
+            {filteredEntries.length > 0 ? (
+              <div className="max-w-4xl mx-auto space-y-4">
+                {filteredEntries.map((entry, index) => (
+                  <Card
+                    key={entry.id.toString()}
+                    className={`p-6 bg-gradient-card border-border/50 hover:border-primary/50 transition-all cursor-pointer ${
+                      index < 3 ? "shadow-glow" : ""
+                    }`}
+                    onClick={() => window.location.href = `/artwork/${entry.id}`}
+                  >
+                    <div className="flex items-center gap-6">
+                      {/* Rank */}
+                      <div className="flex-shrink-0 w-12 flex items-center justify-center">
+                        {getRankIcon(index + 1)}
+                      </div>
 
-                {/* Artwork Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold mb-1 truncate">
-                    {entry.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground truncate">
-                    by {entry.artist}
-                  </p>
-                </div>
+                      {/* Artwork Info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-semibold mb-1 truncate">
+                          {entry.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground truncate">
+                          by {formatAddress(entry.contestant)}
+                        </p>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {entry.tags.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-                {/* Votes */}
-                <div className="flex-shrink-0">
-                  <EncryptedBadge 
-                    value={entry.votes} 
-                    encrypted={false}
-                    label="Votes"
-                    className="text-lg"
-                  />
-                </div>
+                      {/* Votes (Encrypted) */}
+                      <div className="flex-shrink-0">
+                        <EncryptedBadge
+                          encrypted={true}
+                          label="Votes"
+                          className="text-lg"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </div>
-            </Card>
-          ))}
-        </div>
+            ) : (
+              <Card className="max-w-4xl mx-auto p-12 text-center">
+                <p className="text-xl text-muted-foreground mb-4">
+                  No artworks in "{selectedCategory}" category yet
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Try selecting a different category or submit an artwork in this category
+                </p>
+              </Card>
+            )}
+          </>
+        )}
 
         {/* Privacy Notice */}
-        <Card className="max-w-4xl mx-auto mt-8 p-6 bg-primary/5 border-primary/20">
-          <p className="text-sm text-center text-muted-foreground">
-            🔒 Vote counts are decrypted locally for authorized users. 
-            Rankings shown here are based on your decryption permissions.
-          </p>
-        </Card>
+        {!isLoading && !error && filteredEntries.length > 0 && (
+          <Card className="max-w-4xl mx-auto mt-8 p-6 bg-primary/5 border-primary/20">
+            <h3 className="font-semibold mb-2 text-center">🔒 About Rankings</h3>
+            <p className="text-sm text-center text-muted-foreground mb-2">
+              Vote counts are encrypted using FHE (Fully Homomorphic Encryption) and cannot be directly compared.
+            </p>
+            <p className="text-xs text-center text-muted-foreground">
+              Artworks are shown in submission order, not by vote count. True rankings require decryption,
+              which is only available to authorized users. Click on any artwork to view its encrypted metrics.
+            </p>
+          </Card>
+        )}
       </main>
     </div>
   );
