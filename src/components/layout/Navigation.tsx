@@ -88,8 +88,8 @@ const Navigation = () => {
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl font-black text-gradient-aurora tracking-tight">VeilArt</span>
-              <span className="text-[10px] text-muted-foreground font-medium tracking-widest uppercase">Privacy-First Gallery</span>
+              <span className="text-2xl font-black text-gradient-aurora tracking-tight">AetherVault</span>
+              <span className="text-[10px] text-muted-foreground font-medium tracking-widest uppercase">Encrypted Art Sanctuary</span>
             </div>
           </Link>
 
