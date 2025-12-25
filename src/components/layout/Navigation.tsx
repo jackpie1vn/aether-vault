@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Shield, Search, PlusCircle, User, Trophy, Layers, Wallet } from "lucide-react";
+import { Sparkles, Search, PlusCircle, User, Trophy, Layers, Wallet, Zap } from "lucide-react";
 import { getProviderAndSigner } from "@/utils/contract";
 
 const Navigation = () => {
@@ -74,59 +74,75 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-lg bg-background/80 border-b border-border/50">
+    <nav className="sticky top-0 z-50 glass-neon border-b border-primary/10">
+      {/* Animated gradient line at top */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] animate-gradient-border" />
+
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2 group">
+          <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <Shield className="w-8 h-8 text-primary group-hover:text-primary-glow transition-colors" />
-              <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/40 transition-all" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent rounded-xl blur-xl opacity-50 group-hover:opacity-100 transition-all duration-500 group-hover:scale-150 animate-pulse-glow" />
+              <div className="relative bg-gradient-to-br from-primary/20 to-secondary/20 p-2 rounded-xl border border-primary/30 group-hover:border-primary/60 transition-all duration-300">
+                <Sparkles className="w-7 h-7 text-primary group-hover:text-accent transition-all duration-300 group-hover:rotate-12" />
+              </div>
             </div>
-            <span className="text-2xl font-bold text-gradient-cosmic">VeilArt</span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-black text-gradient-aurora tracking-tight">VeilArt</span>
+              <span className="text-[10px] text-muted-foreground font-medium tracking-widest uppercase">Privacy-First Gallery</span>
+            </div>
           </Link>
 
           <div className="flex items-center space-x-1">
             <Link to="/">
-              <Button 
+              <Button
                 variant={isActive("/") ? "default" : "ghost"}
                 size="sm"
-                className="gap-2"
+                className={`gap-2 btn-press btn-neon transition-all duration-300 hover:scale-105 rounded-xl ${
+                  isActive("/") ? "bg-gradient-to-r from-primary to-pink-500 glow-primary" : "hover:bg-primary/10"
+                }`}
               >
-                <Search className="w-4 h-4" />
-                <span className="hidden sm:inline">Explore</span>
+                <Search className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" />
+                <span className="hidden sm:inline font-medium">Explore</span>
               </Button>
             </Link>
 
             <Link to="/submit">
-              <Button 
+              <Button
                 variant={isActive("/submit") ? "default" : "ghost"}
                 size="sm"
-                className="gap-2"
+                className={`gap-2 btn-press btn-neon transition-all duration-300 hover:scale-105 rounded-xl ${
+                  isActive("/submit") ? "bg-gradient-to-r from-secondary to-cyan-400 glow-secondary" : "hover:bg-secondary/10"
+                }`}
               >
-                <PlusCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">Submit</span>
+                <PlusCircle className="w-4 h-4 transition-transform duration-300 hover:rotate-90" />
+                <span className="hidden sm:inline font-medium">Submit</span>
               </Button>
             </Link>
 
             <Link to="/my-submissions">
-              <Button 
+              <Button
                 variant={isActive("/my-submissions") ? "default" : "ghost"}
                 size="sm"
-                className="gap-2"
+                className={`gap-2 btn-press btn-neon transition-all duration-300 hover:scale-105 rounded-xl ${
+                  isActive("/my-submissions") ? "bg-gradient-to-r from-purple-500 to-violet-500 glow-purple" : "hover:bg-purple-500/10"
+                }`}
               >
-                <Layers className="w-4 h-4" />
-                <span className="hidden sm:inline">My Works</span>
+                <Layers className="w-4 h-4 transition-transform duration-300" />
+                <span className="hidden sm:inline font-medium">My Works</span>
               </Button>
             </Link>
 
             <Link to="/leaderboard">
-              <Button 
+              <Button
                 variant={isActive("/leaderboard") ? "default" : "ghost"}
                 size="sm"
-                className="gap-2"
+                className={`gap-2 btn-press btn-neon transition-all duration-300 hover:scale-105 rounded-xl ${
+                  isActive("/leaderboard") ? "bg-gradient-to-r from-accent to-yellow-400 text-black glow-accent" : "hover:bg-accent/10"
+                }`}
               >
-                <Trophy className="w-4 h-4" />
-                <span className="hidden sm:inline">Leaderboard</span>
+                <Trophy className="w-4 h-4 transition-transform duration-300 hover:scale-110" />
+                <span className="hidden sm:inline font-medium">Leaderboard</span>
               </Button>
             </Link>
 
@@ -134,21 +150,21 @@ const Navigation = () => {
               <Button
                 size="sm"
                 variant="outline"
-                className="gap-2 ml-4"
+                className="gap-2 ml-4 glass-neon rounded-xl transition-all duration-300 hover:scale-105 border-secondary/50 hover:border-secondary hover:glow-secondary"
               >
-                <Wallet className="w-4 h-4" />
-                <span className="hidden sm:inline">{formatAddress(walletAddress)}</span>
+                <Wallet className="w-4 h-4 text-secondary" />
+                <span className="hidden sm:inline text-secondary font-mono text-xs">{formatAddress(walletAddress)}</span>
               </Button>
             ) : (
               <Button
                 size="sm"
                 onClick={connectWallet}
                 disabled={isConnecting}
-                className="gap-2 ml-4 bg-gradient-primary hover:opacity-90 transition-opacity"
+                className="gap-2 ml-4 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-[length:200%_100%] hover:bg-right transition-all duration-500 hover:scale-105 glow-primary hover:glow-neon btn-press btn-neon rounded-xl font-semibold"
               >
-                <User className="w-4 h-4" />
+                <Zap className="w-4 h-4" />
                 <span className="hidden sm:inline">
-                  {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                  {isConnecting ? 'Connecting...' : 'Connect'}
                 </span>
               </Button>
             )}

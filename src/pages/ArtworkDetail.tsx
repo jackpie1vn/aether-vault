@@ -42,8 +42,11 @@ const ArtworkDetail = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
+        <div className="text-center animate-pulse-glow p-8 rounded-2xl glass">
+          <Loader2 className="w-16 h-16 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading artwork...</p>
+        </div>
       </div>
     );
   }
@@ -51,13 +54,15 @@ const ArtworkDetail = () => {
   // Artwork not found
   if (!entry) {
     return (
-      <div className="min-h-screen">
+      <div className="min-h-screen page-enter">
         <Navigation />
-        <main className="container mx-auto px-4 py-8 text-center">
-          <h1 className="text-2xl font-bold mb-4">Artwork Not Found</h1>
-          <Button asChild>
-            <a href="/">Back to Home</a>
-          </Button>
+        <main className="container mx-auto px-4 py-16 text-center">
+          <div className="animate-fade-in-up">
+            <h1 className="text-3xl font-bold mb-6 text-gradient-cosmic">Artwork Not Found</h1>
+            <Button asChild className="btn-press hover:scale-105 transition-all duration-300">
+              <a href="/">Back to Home</a>
+            </Button>
+          </div>
         </main>
       </div>
     );
@@ -75,75 +80,83 @@ const ArtworkDetail = () => {
   const imageUrl = getIPFSImageUrl(entry.fileHash);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-enter">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-10">
           {/* Artwork Image */}
-          <div className="space-y-4">
-            <Card className="overflow-hidden bg-gradient-card border-border/50">
-              <img
-                src={imageUrl}
-                alt={entry.title}
-                className="w-full aspect-square object-cover"
-                onError={(e) => {
-                  // Fallback to placeholder if IPFS load fails
-                  e.currentTarget.src = '/placeholder.svg';
-                }}
-              />
+          <div className="space-y-6 animate-fade-in-up">
+            <Card className="overflow-hidden bg-gradient-card border-border/50 hover:border-primary/50 transition-all duration-500 group rounded-2xl">
+              <div className="relative aspect-square overflow-hidden">
+                <img
+                  src={imageUrl}
+                  alt={entry.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  onError={(e) => {
+                    // Fallback to placeholder if IPFS load fails
+                    e.currentTarget.src = '/placeholder.svg';
+                  }}
+                />
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
             </Card>
 
             {/* Encrypted data display */}
-            <CategoryVotesDisplay
-              entryId={entry.id}
-              categories={entry.categories}
-              userAddress={walletAddress}
-              isContestant={entry.contestant.toLowerCase() === walletAddress.toLowerCase()}
-            />
+            <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <CategoryVotesDisplay
+                entryId={entry.id}
+                categories={entry.categories}
+                userAddress={walletAddress}
+                isContestant={entry.contestant.toLowerCase() === walletAddress.toLowerCase()}
+              />
+            </div>
           </div>
 
           {/* Artwork Details */}
           <div className="space-y-6">
-            <div>
-              <h1 className="text-4xl font-bold mb-3 text-gradient-cosmic">
+            <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient-cosmic leading-tight">
                 {entry.title}
               </h1>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-1">
+              <div className="flex items-center gap-5 text-sm text-muted-foreground mb-5">
+                <div className="flex items-center gap-2 px-3 py-1.5 glass rounded-full transition-colors duration-300 hover:text-foreground">
                   <Calendar className="w-4 h-4" />
                   {formatDate(entry.timestamp)}
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2 px-3 py-1.5 glass rounded-full transition-colors duration-300 hover:text-foreground">
                   <User className="w-4 h-4" />
                   {formatAddress(entry.contestant)}
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2 mb-6">
-                {entry.categories.map((cat) => (
-                  <Badge key={cat} className="bg-gradient-primary">{cat}</Badge>
+                {entry.categories.map((cat, index) => (
+                  <Badge key={cat} className="bg-gradient-to-r from-primary to-secondary transition-all duration-300 hover:scale-105" style={{ animationDelay: `${index * 0.05}s` }}>{cat}</Badge>
                 ))}
-                {entry.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="border-primary/30">{tag}</Badge>
+                {entry.tags.map((tag, index) => (
+                  <Badge key={tag} variant="outline" className="border-primary/30 transition-all duration-300 hover:bg-primary/10 hover:scale-105" style={{ animationDelay: `${(entry.categories.length + index) * 0.05}s` }}>{tag}</Badge>
                 ))}
               </div>
             </div>
 
-            <Separator />
+            <Separator className="bg-border/50" />
 
-            <div>
+            <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <h2 className="text-xl font-semibold mb-3">Description Hash</h2>
-              <p className="text-muted-foreground leading-relaxed font-mono text-sm break-all">
-                {entry.descriptionHash}
-              </p>
+              <div className="p-4 glass rounded-xl">
+                <p className="text-muted-foreground leading-relaxed font-mono text-sm break-all">
+                  {entry.descriptionHash}
+                </p>
+              </div>
             </div>
 
-            <Separator />
+            <Separator className="bg-border/50" />
 
             {/* Wallet connection */}
             {!walletAddress && (
-              <div>
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
                 <p className="text-sm text-muted-foreground mb-4">
                   Connect your wallet to rate and vote for this artwork
                 </p>
@@ -153,17 +166,20 @@ const ArtworkDetail = () => {
 
             {/* Rating and voting component */}
             {walletAddress && (
-              <ArtworkActions
-                entryId={entry.id}
-                categories={entry.categories}
-                walletAddress={walletAddress}
-              />
+              <div className="animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
+                <ArtworkActions
+                  entryId={entry.id}
+                  categories={entry.categories}
+                  walletAddress={walletAddress}
+                />
+              </div>
             )}
 
             {/* IPFS Link */}
             <Button
               variant="outline"
-              className="w-full gap-2"
+              className="w-full gap-2 h-12 glass hover:border-primary/50 transition-all duration-300 hover:scale-[1.02] btn-press rounded-xl animate-fade-in-up"
+              style={{ animationDelay: '0.3s' }}
               onClick={() => window.open(`https://ipfs.io/ipfs/${entry.fileHash}`, '_blank')}
             >
               <ExternalLink className="w-4 h-4" />

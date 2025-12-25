@@ -63,26 +63,26 @@ const MySubmissions = () => {
   }));
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-enter">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
-            <Layers className="w-8 h-8 text-primary-glow" />
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 mb-6 animate-pulse-glow">
+            <Layers className="w-10 h-10 text-primary-glow animate-float" />
           </div>
-          <h1 className="text-4xl font-bold mb-3 text-gradient-cosmic">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient-cosmic animate-fade-in-up">
             My Submissions
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-lg text-muted-foreground animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             View your submitted artworks and their encrypted metrics
           </p>
         </div>
 
         {/* Wallet connection */}
         {!walletAddress ? (
-          <div className="max-w-md mx-auto mb-8">
-            <p className="text-center text-muted-foreground mb-4">
+          <div className="max-w-md mx-auto mb-10 animate-scale-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-center text-muted-foreground mb-5">
               Connect your wallet to view your submissions
             </p>
             <WalletConnect onConnected={setWalletAddress} />
@@ -90,25 +90,25 @@ const MySubmissions = () => {
         ) : (
           <>
             {/* Stats Overview */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-              <Card className="p-6 bg-gradient-card border-border/50 text-center">
-                <p className="text-sm text-muted-foreground mb-2">Total Submissions</p>
-                <p className="text-3xl font-bold text-gradient-primary">
+            <div className="grid md:grid-cols-3 gap-6 mb-14 max-w-4xl mx-auto">
+              <Card className="p-6 bg-gradient-card border-border/50 text-center hover:border-primary/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl animate-fade-in-up rounded-2xl" style={{ animationDelay: '0.1s' }}>
+                <p className="text-sm text-muted-foreground mb-3">Total Submissions</p>
+                <p className="text-4xl font-bold text-gradient-primary">
                   {isLoading ? "..." : myEntries.length}
                 </p>
               </Card>
-              <Card className="p-6 bg-gradient-card border-border/50 text-center">
-                <p className="text-sm text-muted-foreground mb-2">Total Scores</p>
-                <div className="flex flex-col items-center gap-2">
+              <Card className="p-6 bg-gradient-card border-border/50 text-center hover:border-secondary/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl animate-fade-in-up rounded-2xl" style={{ animationDelay: '0.15s' }}>
+                <p className="text-sm text-muted-foreground mb-3">Total Scores</p>
+                <div className="flex flex-col items-center gap-3">
                   <EncryptedBadge encrypted label="Scores" />
                   <p className="text-xs text-muted-foreground">
                     View individual artwork details to see encrypted scores
                   </p>
                 </div>
               </Card>
-              <Card className="p-6 bg-gradient-card border-border/50 text-center">
-                <p className="text-sm text-muted-foreground mb-2">Total Votes</p>
-                <div className="flex flex-col items-center gap-2">
+              <Card className="p-6 bg-gradient-card border-border/50 text-center hover:border-accent/50 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl animate-fade-in-up rounded-2xl" style={{ animationDelay: '0.2s' }}>
+                <p className="text-sm text-muted-foreground mb-3">Total Votes</p>
+                <div className="flex flex-col items-center gap-3">
                   <EncryptedBadge encrypted label="Votes" />
                   <p className="text-xs text-muted-foreground">
                     View individual artwork details to see encrypted votes
@@ -119,17 +119,17 @@ const MySubmissions = () => {
 
             {/* Loading state */}
             {isLoading && (
-              <Card className="p-12 text-center">
-                <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-primary" />
-                <p className="text-muted-foreground">Loading your submissions...</p>
+              <Card className="p-16 text-center glass border-border/30 rounded-2xl animate-pulse-glow">
+                <Loader2 className="w-16 h-16 animate-spin mx-auto mb-6 text-primary" />
+                <p className="text-lg text-muted-foreground">Loading your submissions...</p>
               </Card>
             )}
 
             {/* Error state */}
             {error && !isLoading && (
-              <Card className="p-8 text-center border-destructive/50">
-                <p className="text-destructive mb-4">{error}</p>
-                <Button onClick={loadMyEntries} variant="outline">
+              <Card className="p-10 text-center border-destructive/50 glass rounded-2xl animate-scale-in">
+                <p className="text-destructive mb-6 text-lg">{error}</p>
+                <Button onClick={loadMyEntries} variant="outline" className="btn-press hover:scale-105 transition-all duration-300">
                   Retry
                 </Button>
               </Card>
@@ -140,15 +140,21 @@ const MySubmissions = () => {
               <>
                 {formatArtworks.length > 0 ? (
                   <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {formatArtworks.map((artwork) => (
-                        <ArtworkCard key={artwork.id} {...artwork} encrypted={false} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {formatArtworks.map((artwork, index) => (
+                        <div
+                          key={artwork.id}
+                          className="animate-fade-in-up"
+                          style={{ animationDelay: `${0.1 + index * 0.08}s` }}
+                        >
+                          <ArtworkCard {...artwork} encrypted={false} />
+                        </div>
                       ))}
                     </div>
 
                     {/* Privacy Notice */}
-                    <Card className="max-w-4xl mx-auto mt-8 p-6 bg-primary/5 border-primary/20">
-                      <h3 className="font-semibold mb-2 text-center">🔒 About Encrypted Metrics</h3>
+                    <Card className="max-w-4xl mx-auto mt-12 p-8 bg-primary/5 border-primary/20 rounded-2xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                      <h3 className="font-semibold mb-3 text-center text-lg">About Encrypted Metrics</h3>
                       <p className="text-sm text-center text-muted-foreground mb-3">
                         Due to FHE (Fully Homomorphic Encryption), scores and votes are stored as encrypted values on the blockchain.
                       </p>
@@ -159,12 +165,12 @@ const MySubmissions = () => {
                     </Card>
                   </>
                 ) : (
-                  <div className="text-center py-20">
-                    <p className="text-xl text-muted-foreground mb-4">
+                  <div className="text-center py-24 animate-fade-in">
+                    <p className="text-2xl text-muted-foreground mb-6">
                       You haven't submitted any artworks yet.
                     </p>
-                    <Button asChild>
-                      <a href="/submit">Submit your first artwork →</a>
+                    <Button asChild className="btn-press hover:scale-105 transition-all duration-300 bg-gradient-to-r from-primary to-secondary hover:shadow-lg hover:shadow-primary/30">
+                      <a href="/submit">Submit your first artwork</a>
                     </Button>
                   </div>
                 )}
