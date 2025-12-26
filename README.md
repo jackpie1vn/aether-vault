@@ -2,6 +2,17 @@
 
 A decentralized art contest platform with FHE-powered private voting, built on the Zama Protocol.
 
+## Deployed Contract
+
+| Network | Contract Address | Explorer |
+|---------|------------------|----------|
+| Sepolia | `0xf0a676562bA0eeD3CE0F168d561B0b06cDa1e689` | [View on Etherscan](https://sepolia.etherscan.io/address/0xf0a676562bA0eeD3CE0F168d561B0b06cDa1e689) |
+
+## Live Demo
+
+- **Frontend**: https://aether-vault.vercel.app
+- **Video Demo**: [Coming Soon]
+
 ## Overview
 
 AetherVault enables artists to submit artwork and receive encrypted votes using Fully Homomorphic Encryption (FHE). This ensures complete voting privacy while maintaining on-chain transparency and verifiability.
