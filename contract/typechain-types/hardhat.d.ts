@@ -14,14 +14,6 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
-      name: "EthereumConfig",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.EthereumConfig__factory>;
-    getContractFactory(
-      name: "SepoliaConfig",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SepoliaConfig__factory>;
-    getContractFactory(
       name: "ZamaConfig",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ZamaConfig__factory>;
@@ -33,10 +25,6 @@ declare module "hardhat/types/runtime" {
       name: "FHE",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.FHE__factory>;
-    getContractFactory(
-      name: "IDecryptionOracle",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDecryptionOracle__factory>;
     getContractFactory(
       name: "IKMSVerifier",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -59,16 +47,6 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ArtContest__factory>;
 
     getContractAt(
-      name: "EthereumConfig",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.EthereumConfig>;
-    getContractAt(
-      name: "SepoliaConfig",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.SepoliaConfig>;
-    getContractAt(
       name: "ZamaConfig",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -83,11 +61,6 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.FHE>;
-    getContractAt(
-      name: "IDecryptionOracle",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IDecryptionOracle>;
     getContractAt(
       name: "IKMSVerifier",
       address: string | ethers.Addressable,
@@ -115,14 +88,6 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ArtContest>;
 
     deployContract(
-      name: "EthereumConfig",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.EthereumConfig>;
-    deployContract(
-      name: "SepoliaConfig",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SepoliaConfig>;
-    deployContract(
       name: "ZamaConfig",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.ZamaConfig>;
@@ -134,10 +99,6 @@ declare module "hardhat/types/runtime" {
       name: "FHE",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.FHE>;
-    deployContract(
-      name: "IDecryptionOracle",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IDecryptionOracle>;
     deployContract(
       name: "IKMSVerifier",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -160,16 +121,6 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ArtContest>;
 
     deployContract(
-      name: "EthereumConfig",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.EthereumConfig>;
-    deployContract(
-      name: "SepoliaConfig",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.SepoliaConfig>;
-    deployContract(
       name: "ZamaConfig",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -184,11 +135,6 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.FHE>;
-    deployContract(
-      name: "IDecryptionOracle",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IDecryptionOracle>;
     deployContract(
       name: "IKMSVerifier",
       args: any[],
