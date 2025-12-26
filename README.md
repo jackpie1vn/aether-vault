@@ -11,7 +11,7 @@ A decentralized art contest platform with FHE-powered private voting, built on t
 ## Live Demo
 
 - **Frontend**: https://aether-vault.vercel.app
-- **Video Demo**: https://www.youtube.com/watch?v=2RdNqPwFHcw
+- **Video Demo**: https://www.youtube.com/watch?v=-Ij37Chzny8
 
 ## Overview
 
