@@ -2,12 +2,12 @@
 pragma solidity ^0.8.27;
 
 import {FHE, euint32, euint64, euint256, externalEuint32, externalEuint64, externalEuint256} from "@fhevm/solidity/lib/FHE.sol";
-import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
+import {ZamaEthereumConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 
-/// @title ArtContest – 链上艺术评选竞赛平台（FHE 版）
-/// @notice 参赛作品的评分、投票计数等以 FHE 加密存储，参赛者与评委通过 ACL 进行解密授权；
-///         作品文件与描述等明文内容仅保存哈希（例如 IPFS/Arweave 哈希）。
-contract ArtContest is SepoliaConfig {
+/// @title ArtContest – On-chain Art Contest Platform (FHE Version)
+/// @notice Scores and vote counts are stored encrypted using FHE. Contestants and judges use ACL for decryption authorization.
+///         Artwork files and descriptions are stored as hashes (e.g., IPFS/Arweave hashes).
+contract ArtContest is ZamaEthereumConfig {
     struct ContestEntry {
         uint256 id;                    // 参赛作品ID
         address contestant;            // 参赛者地址

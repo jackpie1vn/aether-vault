@@ -1,73 +1,162 @@
-# Welcome to your Lovable project
+# AetherVault - Encrypted Art Sanctuary
 
-## Project info
+A decentralized art contest platform with FHE-powered private voting, built on the Zama Protocol.
 
-**URL**: https://lovable.dev/projects/4358706a-5662-4206-9ec6-845b2515de56
+## Overview
 
-## How can I edit this code?
+AetherVault enables artists to submit artwork and receive encrypted votes using Fully Homomorphic Encryption (FHE). This ensures complete voting privacy while maintaining on-chain transparency and verifiability.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Private Voting**: Vote counts are encrypted using FHE, ensuring voter privacy
+- **On-chain Art Submissions**: Submit artwork with metadata stored on IPFS
+- **Category-based Contests**: Organize artwork into multiple categories
+- **Encrypted Leaderboards**: Rankings computed on encrypted data
+- **Web3 Wallet Integration**: Connect with MetaMask or compatible wallets
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4358706a-5662-4206-9ec6-845b2515de56) and start prompting.
+## Technology Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Smart Contracts
+- **Solidity** ^0.8.27
+- **fhEVM** v0.9.1 - Zama's FHE library for encrypted computations
+- **Hardhat** - Development environment
+- **Zama Protocol** - ZamaEthereumConfig for network configuration
 
-**Use your preferred IDE**
+### Frontend
+- **React** 18 + TypeScript
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - UI components
+- **@zama-fhe/relayer-sdk** 0.3.0-8 - FHE relayer integration
+- **ethers.js** v6 - Ethereum interactions
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Smart Contract Architecture
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The `ArtContest` contract inherits from `ZamaEthereumConfig` and provides:
 
-Follow these steps:
+```solidity
+contract ArtContest is ZamaEthereumConfig {
+    // Encrypted vote storage using FHE
+    euint32 scoresEnc;  // Encrypted score counter
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+    // Key functions:
+    function submitEntry(...) external returns (uint256 entryId)
+    function scoreEntry(uint256 entryId) external
+    function voteEntry(uint256 entryId, string category) external
+}
 ```
 
-**Edit a file directly in GitHub**
+### FHE Operations
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- **Encrypted Addition**: `FHE.add(entry.scoresEnc, 1)` - Increment votes without revealing count
+- **Access Control**: `FHE.allow()` / `FHE.allowTransient()` - Manage decryption permissions
+- **Coprocessor Integration**: Automatic setup via `ZamaEthereumConfig`
 
-**Use GitHub Codespaces**
+## Getting Started
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Prerequisites
 
-## What technologies are used for this project?
+- Node.js >= 18
+- npm or yarn
+- MetaMask wallet
 
-This project is built with:
+### Installation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```bash
+# Clone the repository
+git clone https://github.com/jackpie1vn/aether-vault.git
+cd aether-vault
 
-## How can I deploy this project?
+# Install frontend dependencies
+npm install
 
-Simply open [Lovable](https://lovable.dev/projects/4358706a-5662-4206-9ec6-845b2515de56) and click on Share -> Publish.
+# Install contract dependencies
+cd contract
+npm install
+```
 
-## Can I connect a custom domain to my Lovable project?
+### Environment Setup
 
-Yes, you can!
+Create `.env` file in root directory:
+```env
+VITE_CONTRACT_ADDRESS=<deployed_contract_address>
+VITE_ZAMA_RPC_URL=https://devnet.zama.ai
+VITE_ZAMA_CHAIN_ID=9000
+VITE_IPFS_GATEWAY=https://ipfs.io/ipfs/
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Create `.env` file in contract directory:
+```env
+PRIVATE_KEY=<your_private_key>
+ZAMA_RPC_URL=https://devnet.zama.ai
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Running the Application
+
+```bash
+# Start frontend development server
+npm run dev
+
+# Compile contracts
+cd contract
+npm run compile
+
+# Deploy to Zama network
+npm run deploy
+```
+
+## Network Configuration
+
+| Network | Chain ID | RPC URL |
+|---------|----------|---------|
+| Zama Devnet | 9000 | https://devnet.zama.ai |
+| Sepolia (testing) | 11155111 | https://ethereum-sepolia-rpc.publicnode.com |
+
+## Project Structure
+
+```
+aether-vault/
+├── src/
+│   ├── components/     # React components
+│   ├── pages/          # Page components
+│   ├── utils/          # Utility functions
+│   └── hooks/          # Custom React hooks
+├── contract/
+│   ├── contracts/      # Solidity contracts
+│   ├── scripts/        # Deployment scripts
+│   └── hardhat.config.ts
+└── public/             # Static assets
+```
+
+## How It Works
+
+1. **Submit Artwork**: Artists connect wallet and submit artwork with IPFS hash
+2. **Private Voting**: Users cast encrypted votes using FHE
+3. **Encrypted Tallying**: Vote counts remain encrypted on-chain
+4. **Decryption**: Only authorized parties can decrypt vote counts via ACL
+
+## Dependencies
+
+### Contract
+- `@fhevm/solidity`: 0.9.1
+- `@fhevm/hardhat-plugin`: ^0.3.0-4
+- `hardhat`: ^2.26.3
+
+### Frontend
+- `@zama-fhe/relayer-sdk`: 0.3.0-8
+- `ethers`: ^6.15.0
+- `react`: ^18.3.1
+
+## License
+
+MIT
+
+## Links
+
+- [Zama Protocol Documentation](https://docs.zama.org/protocol)
+- [fhEVM Solidity Library](https://github.com/zama-ai/fhevm-solidity)
+- [Live Demo](https://aether-vault.vercel.app)
+
+---
+
+Built with Zama fhEVM for the Zama Developer Program
