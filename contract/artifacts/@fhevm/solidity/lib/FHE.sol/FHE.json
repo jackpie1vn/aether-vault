@@ -5,35 +5,47 @@
   "abi": [
     {
       "inputs": [],
-      "name": "HandlesAlreadySavedForRequestID",
-      "type": "error"
-    },
-    {
-      "inputs": [],
       "name": "InvalidKMSSignatures",
       "type": "error"
     },
     {
-      "inputs": [],
-      "name": "NoHandleFoundForRequestID",
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "handle",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "SenderNotAllowedToUseHandle",
       "type": "error"
     },
     {
       "anonymous": false,
       "inputs": [
         {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "requestID",
-          "type": "uint256"
+          "indexed": false,
+          "internalType": "bytes32[]",
+          "name": "handlesList",
+          "type": "bytes32[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "abiEncodedCleartexts",
+          "type": "bytes"
         }
       ],
-      "name": "DecryptionFulfilled",
+      "name": "PublicDecryptionVerified",
       "type": "event"
     }
   ],
-  "bytecode": "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220e9f490afdefd3ac4ff582f1f6c7088246e72dfdc3e929b025883c29069bf821964736f6c634300081b0033",
-  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220e9f490afdefd3ac4ff582f1f6c7088246e72dfdc3e929b025883c29069bf821964736f6c634300081b0033",
+  "bytecode": "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220cfdbcb0ca116bcb6f610ddf8b4da3f1f71d429d6d89883c1fd6b796c0d9f320364736f6c634300081b0033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220cfdbcb0ca116bcb6f610ddf8b4da3f1f71d429d6d89883c1fd6b796c0d9f320364736f6c634300081b0033",
   "linkReferences": {},
   "deployedLinkReferences": {}
 }

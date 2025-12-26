@@ -18,7 +18,7 @@ AetherVault enables artists to submit artwork and receive encrypted votes using 
 
 ### Smart Contracts
 - **Solidity** ^0.8.27
-- **fhEVM** v0.9.1 - Zama's FHE library for encrypted computations
+- **fhEVM** v0.10.0 - Zama's FHE library for encrypted computations
 - **Hardhat** - Development environment
 - **Zama Protocol** - ZamaEthereumConfig for network configuration
 
@@ -138,8 +138,8 @@ aether-vault/
 ## Dependencies
 
 ### Contract
-- `@fhevm/solidity`: 0.9.1
-- `@fhevm/hardhat-plugin`: ^0.3.0-4
+- `@fhevm/solidity`: 0.10.0
+- `@fhevm/hardhat-plugin`: 0.3.0-4
 - `hardhat`: ^2.26.3
 
 ### Frontend

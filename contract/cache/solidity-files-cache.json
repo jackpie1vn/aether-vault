@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/contracts/ArtContest.sol": {
-      "lastModificationDate": 1761484944836,
-      "contentHash": "1e5c055a937889e47717290cd2cdc13c",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\contracts\\ArtContest.sol": {
+      "lastModificationDate": 1766713058125,
+      "contentHash": "89bbe55f0da2029f85de156ae83820b6",
       "sourceName": "contracts/ArtContest.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -40,9 +40,9 @@
         "ArtContest"
       ]
     },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/fhevmTemp/@fhevm/solidity/config/ZamaConfig.sol": {
-      "lastModificationDate": 1761486118104,
-      "contentHash": "36810e84dfdd27616b5eaf3b31ddc0a9",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\fhevmTemp\\@fhevm\\solidity\\config\\ZamaConfig.sol": {
+      "lastModificationDate": 1766714787684,
+      "contentHash": "e2172ef756221e77fec25fea646b3462",
       "sourceName": "@fhevm/solidity/config/ZamaConfig.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -69,7 +69,6 @@
         }
       },
       "imports": [
-        "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
         "@fhevm/solidity/lib/FHE.sol",
         "@fhevm/solidity/lib/Impl.sol"
       ],
@@ -77,14 +76,13 @@
         "^0.8.24"
       ],
       "artifacts": [
-        "EthereumConfig",
-        "SepoliaConfig",
-        "ZamaConfig"
+        "ZamaConfig",
+        "ZamaEthereumConfig"
       ]
     },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/node_modules/@fhevm/solidity/lib/FHE.sol": {
-      "lastModificationDate": 1761470926244,
-      "contentHash": "4595eb92a31223262d4e29a27c938d97",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\node_modules\\@fhevm\\solidity\\lib\\FHE.sol": {
+      "lastModificationDate": 1766714745560,
+      "contentHash": "6ea1c237aca19e21699bd2105d2b654f",
       "sourceName": "@fhevm/solidity/lib/FHE.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -120,47 +118,12 @@
       ],
       "artifacts": [
         "FHE",
-        "IDecryptionOracle",
         "IKMSVerifier"
       ]
     },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/fhevmTemp/@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol": {
-      "lastModificationDate": 1761484923832,
-      "contentHash": "7d4cce05c3d5e3799454d5a9fba75048",
-      "sourceName": "@zama-fhe/oracle-solidity/address/ZamaOracleAddress.sol",
-      "solcConfig": {
-        "version": "0.8.27",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.24"
-      ],
-      "artifacts": []
-    },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/node_modules/@fhevm/solidity/lib/Impl.sol": {
-      "lastModificationDate": 1761470926281,
-      "contentHash": "82d95a375319ded89a84a9323575b351",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\node_modules\\@fhevm\\solidity\\lib\\Impl.sol": {
+      "lastModificationDate": 1766714745808,
+      "contentHash": "68866e1050079bd9720398ae0290121a",
       "sourceName": "@fhevm/solidity/lib/Impl.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -199,10 +162,10 @@
         "Impl"
       ]
     },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/node_modules/@fhevm/solidity/lib/FheType.sol": {
-      "lastModificationDate": 1761470926262,
-      "contentHash": "65f472a3e319ba73ac6b19a5e8660d15",
-      "sourceName": "@fhevm/solidity/lib/FheType.sol",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\node_modules\\encrypted-types\\EncryptedTypes.sol": {
+      "lastModificationDate": 1766714744876,
+      "contentHash": "521a624fad71cd29fc4b7c443b41bb86",
+      "sourceName": "encrypted-types/EncryptedTypes.sol",
       "solcConfig": {
         "version": "0.8.27",
         "settings": {
@@ -233,10 +196,10 @@
       ],
       "artifacts": []
     },
-    "/Users/zhuyingjie/code/zama/veil-art-unveiled/contract/node_modules/encrypted-types/EncryptedTypes.sol": {
-      "lastModificationDate": 1761470925977,
-      "contentHash": "521a624fad71cd29fc4b7c443b41bb86",
-      "sourceName": "encrypted-types/EncryptedTypes.sol",
+    "C:\\Users\\computer10\\Desktop\\tool\\zama\\zama2\\veil-art-unveiled\\contract\\node_modules\\@fhevm\\solidity\\lib\\FheType.sol": {
+      "lastModificationDate": 1766714745667,
+      "contentHash": "65f472a3e319ba73ac6b19a5e8660d15",
+      "sourceName": "@fhevm/solidity/lib/FheType.sol",
       "solcConfig": {
         "version": "0.8.27",
         "settings": {

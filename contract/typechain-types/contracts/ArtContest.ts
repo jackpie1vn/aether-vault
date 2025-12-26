@@ -26,11 +26,11 @@ import type {
 export interface ArtContestInterface extends Interface {
   getFunction(
     nameOrSignature:
+      | "confidentialProtocolId"
       | "getAllEntries"
       | "getCategoryVotes"
       | "getEntry"
       | "nextEntryId"
-      | "protocolId"
       | "scoreEntry"
       | "submitEntry"
       | "voteEntry"
@@ -40,6 +40,10 @@ export interface ArtContestInterface extends Interface {
     nameOrSignatureOrTopic: "EntryScored" | "EntrySubmitted" | "EntryVoted"
   ): EventFragment;
 
+  encodeFunctionData(
+    functionFragment: "confidentialProtocolId",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getAllEntries",
     values?: undefined
@@ -57,10 +61,6 @@ export interface ArtContestInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "protocolId",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "scoreEntry",
     values: [BigNumberish]
   ): string;
@@ -74,6 +74,10 @@ export interface ArtContestInterface extends Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "confidentialProtocolId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getAllEntries",
     data: BytesLike
   ): Result;
@@ -86,7 +90,6 @@ export interface ArtContestInterface extends Interface {
     functionFragment: "nextEntryId",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "scoreEntry", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "submitEntry",
@@ -191,6 +194,8 @@ export interface ArtContest extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
+  confidentialProtocolId: TypedContractMethod<[], [bigint], "view">;
+
   getAllEntries: TypedContractMethod<[], [bigint[]], "view">;
 
   getCategoryVotes: TypedContractMethod<
@@ -229,8 +234,6 @@ export interface ArtContest extends BaseContract {
 
   nextEntryId: TypedContractMethod<[], [bigint], "view">;
 
-  protocolId: TypedContractMethod<[], [bigint], "view">;
-
   scoreEntry: TypedContractMethod<
     [entryId: BigNumberish],
     [void],
@@ -259,6 +262,9 @@ export interface ArtContest extends BaseContract {
     key: string | FunctionFragment
   ): T;
 
+  getFunction(
+    nameOrSignature: "confidentialProtocolId"
+  ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "getAllEntries"
   ): TypedContractMethod<[], [bigint[]], "view">;
@@ -300,9 +306,6 @@ export interface ArtContest extends BaseContract {
   >;
   getFunction(
     nameOrSignature: "nextEntryId"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "protocolId"
   ): TypedContractMethod<[], [bigint], "view">;
   getFunction(
     nameOrSignature: "scoreEntry"
